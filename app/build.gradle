@@ -3,11 +3,13 @@ plugins {
 }
 
 android {
+    // 关键：Namespace 必须对齐物理路径，保证 R 文件位置正确
     namespace 'com.boss.unitsmaster'
     compileSdk 34
 
     defaultConfig {
-        applicationId "com.boss.unitsmaster"
+        // 这里是 App 在手机里的唯一身份证
+        applicationId "com.boss.currency" 
         minSdk 24
         targetSdk 34
         versionCode 1
@@ -16,8 +18,8 @@ android {
 
     signingConfigs {
         release {
-            storeFile file("../release-key.jks")
-            // 这里的变量名和 main.yml 里的 env 对应
+            // 指向根目录生成的 jks 文件
+            storeFile file("${project.rootDir}/release-key.jks")
             storePassword System.getenv("SIGNING_STORE_PASSWORD")
             keyAlias System.getenv("SIGNING_KEY_ALIAS")
             keyPassword System.getenv("SIGNING_KEY_PASSWORD")
