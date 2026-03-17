@@ -1,26 +1,36 @@
 package com.boss.unitsmaster;
 
 import android.os.Bundle;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 
 public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 1. 确保你的 layout 名字叫 activity_main
         setContentView(R.layout.activity_main);
 
-        // 2. 初始化 AdMob (这一步没做也会闪退)
-        MobileAds.initialize(this, initializationStatus -> {});
+        EditText etCny = findViewById(R.id.et_cny);
+        Button btnConvert = findViewById(R.id.btn_convert);
+        TextView tvResult = findViewById(R.id.tv_result);
 
-        // 3. 加载广告 (前提是你的 XML 里得有 adView 这个 ID)
-        AdView mAdView = findViewById(R.id.adView);
-        if (mAdView != null) {
-            AdRequest adRequest = new AdRequest.Builder().build();
-            mAdView.loadAd(adRequest);
-        }
+        btnConvert.setOnClickListener(v -> {
+            String input = etCny.getText().toString();
+            if (input.isEmpty()) return;
+
+            double cny = Double.parseDouble(input);
+            // 简单写死固定汇率演示逻辑
+            double usd = cny * 0.14; 
+            double jpy = cny * 21.0;
+            double eur = cny * 0.13;
+
+            String result = getString(R.string.res_usd) + String.format("%.2f", usd) + "\n"
+                          + getString(R.string.res_jpy) + String.format("%.2f", jpy) + "\n"
+                          + getString(R.string.res_eur) + String.format("%.2f", eur);
+            
+            tvResult.setText(result);
+        });
     }
 }
